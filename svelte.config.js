@@ -11,7 +11,8 @@ const config = {
 		adapter: adapter({
 			out: "build"
 		})
-	}
+	},
+	ssr: "false"
 };
 
 export default config;

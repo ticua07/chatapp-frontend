@@ -1,9 +1,22 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import { browser } from "$app/env";
 	import Messages from "./Messages.svelte";
+
 	type Message = {
 		author: string;
 		content: string;
 	};
+
+	let username: string;
+	if (browser) {
+		let data = localStorage.getItem("username");
+		if (data) {
+			username = data;
+		} else {
+			goto("/");
+		}
+	}
 
 	export let id: string;
 	let messages: Message[] = [];
@@ -37,7 +50,7 @@
 				/>
 			</svg>
 		</a>
-		<h1>Chat Title | id={id}</h1>
+		<h1>Chat Title | id={id} | username={username}</h1>
 	</div>
 	<hr />
 	<div class="chat">
