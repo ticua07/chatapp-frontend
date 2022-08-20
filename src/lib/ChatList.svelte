@@ -5,7 +5,6 @@
 		description: string;
 	};
 	export let chats: Chat[];
-	console.log(chats);
 </script>
 
 <div class="container">
@@ -18,11 +17,6 @@
 			<!-- <p>{chat.id}</p> -->
 		</div>
 	{/each}
-	<!-- <div class="card">
-		<h2>Title</h2>
-		<p>Simple description Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-		<a href="/#"><button class="join__button">Entrar</button></a>
-	</div> -->
 </div>
 
 <style>
