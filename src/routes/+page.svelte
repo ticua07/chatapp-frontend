@@ -3,13 +3,13 @@
 	let chats = [
 		{
 			id: '1',
-			title: 'Virgo chat only',
-			description: 'Chat full de virgos, no se acepta gente normal ⛔'
+			title: 'Chat 1 only',
+			description: 'Chat 1 ⛔'
 		},
 		{
 			id: '2',
 			title: 'goodbye',
-			description: 'mi maldito world'
+			description: 'my world'
 		}
 	];
 </script>
