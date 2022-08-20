@@ -53,6 +53,12 @@
 		gap: 10px;
 	}
 
+	.card::selection {
+		/* Set selection colors to defaul */
+		color: initial;
+		background-color: initial;
+	}
+
 	a {
 		width: fit-content;
 	}
