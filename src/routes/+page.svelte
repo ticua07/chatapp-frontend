@@ -1,3 +1,57 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	import ChatList from '$lib/ChatList.svelte';
+	let chats = [
+		{
+			id: '1',
+			title: 'Virgo chat only',
+			description: 'Chat full de virgos, no se acepta gente normal ⛔'
+		},
+		{
+			id: '2',
+			title: 'goodbye',
+			description: 'mi maldito world'
+		}
+	];
+</script>
+
+<div class="container">
+	<div class="card">
+		<h1 class="title">Chats</h1>
+		<hr />
+		<ChatList {chats} />
+	</div>
+</div>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+	.container {
+		background-color: #333;
+		height: 100vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.card {
+		background-color: #18181b;
+		height: 800px;
+		max-width: 800px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border-radius: 5px;
+		padding: 10px;
+	}
+	.title {
+		-webkit-font-smoothing: antialiased;
+		color: white;
+		font-weight: 400;
+		font-family: 'Poppins';
+		font-size: 2.5rem;
+	}
+	hr {
+		border-color: #999;
+		width: 100%;
+		margin-bottom: 10px;
+	}
+</style>
