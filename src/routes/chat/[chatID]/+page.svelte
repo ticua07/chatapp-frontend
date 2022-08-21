@@ -1,7 +1,6 @@
 <script>
-	import { page } from '$app/stores';
-	import Chat from '$lib/Chat.svelte';
-	console.log($page.params);
+	import { page } from "$app/stores";
+	import Chat from "$lib/Chat.svelte";
 </script>
 
 <div class="container">

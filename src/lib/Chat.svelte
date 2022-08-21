@@ -2,12 +2,12 @@
 	import { goto } from "$app/navigation";
 	import { browser } from "$app/env";
 	import Messages from "./Messages.svelte";
+	import { onMount } from "svelte";
 
 	type Message = {
 		author: string;
 		content: string;
 	};
-
 	let username: string;
 	if (browser) {
 		let data = localStorage.getItem("username");
@@ -19,15 +19,17 @@
 	}
 
 	export let id: string;
+	let chat: WebSocket;
+	let randomIdentifier: string;
 	let messages: Message[] = [];
 	let inputValue = "";
 
 	const addMessage = () => {
-		if (inputValue.trim() === "") {
+		if (inputValue.trim() === "" || !chat || !username) {
 			return;
 		}
-		console.log(`Got new message: ${inputValue}`);
-		messages = [...messages, { author: "Ticua07", content: inputValue }];
+		const newMessage = { author: username, content: inputValue };
+		chat.send(JSON.stringify({ ...newMessage, type: "newMessage" }));
 		inputValue = ""; // clear input
 	};
 
@@ -35,6 +37,24 @@
 		event.preventDefault();
 		addMessage();
 	};
+
+	onMount(() => {
+		chat = new WebSocket(`ws://localhost:8765/${id}`);
+		chat.onopen = () => {
+			chat.onmessage = (message) => {
+				const newMessage = JSON.parse(message.data);
+				if (newMessage.type == "identify") {
+					randomIdentifier = JSON.parse(message.data).randomID;
+					username = `${username}-${randomIdentifier}`;
+
+					console.log(`my randomID is ${randomIdentifier}`);
+				} else {
+					messages = [...messages, newMessage];
+				}
+			};
+			chat.send(JSON.stringify({ type: "connect" }));
+		};
+	});
 </script>
 
 <div class="card">
