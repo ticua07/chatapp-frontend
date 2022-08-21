@@ -9,7 +9,8 @@
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
 		"format": "prettier --write --plugin-search-dir=. .",
 		"vite-build": "vite build",
-		"vite-preview": "vite preview"
+		"vite-preview": "vite preview --host",
+		"docker": "echo App is running on port 3000 && docker compose up -d"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",

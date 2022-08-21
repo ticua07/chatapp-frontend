@@ -1,0 +1,8 @@
+version: "3.9"
+name: chatapp-frontend
+
+services:
+  webapp:
+    image: chatapp/frontend
+    ports:
+      - "3000:4173" # asdasd
