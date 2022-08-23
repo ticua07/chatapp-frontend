@@ -13,10 +13,16 @@
 
 	let loggedIn = false;
 	let username = "";
-	let chats: Chats[];
+	let chats: Chats[] = [];
 	let chatWS: WebSocket;
+	let error = false;
+
 	if (browser) {
 		chatWS = new WebSocket(`ws://localhost:8765/chat`);
+		chatWS.onerror = (err) => {
+			error = true;
+		};
+
 		chatWS.onmessage = (message) => {
 			let result = JSON.parse(message.data);
 			if (result.type === "chatlist") {
@@ -49,6 +55,11 @@
 				<input bind:value={username} type="text" placeholder="Ticua07" />
 				<button on:click={setInput}>Enter chats</button>
 			</div>
+		{:else if error === true}
+			<div class="error-container">
+				<h1>An error has occurred.</h1>
+				<p>Server might be down. <br /> come back in a minute.</p>
+			</div>
 		{:else}
 			<h1 class="title">Chats | {username}</h1>
 			<hr />
@@ -65,6 +76,24 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.error-container {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color: white;
+	}
+	.error-container > h1 {
+		font-size: 3rem;
+		text-align: center;
+	}
+	.error-container > p {
+		font-size: 1.2rem;
+		text-align: center;
 	}
 
 	.login-container {
@@ -104,7 +133,8 @@
 
 	.card {
 		background-color: #18181b;
-		height: 800px;
+		height: 100%;
+		max-height: 800px;
 		max-width: 800px;
 		width: 100%;
 		display: flex;

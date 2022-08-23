@@ -7,7 +7,7 @@
 			connected: number;
 		};
 	};
-	export let chats: Chat[];
+	export let chats: Chat[] = [];
 	export let socket: WebSocket;
 	let name: string;
 	let description: string;
@@ -59,7 +59,6 @@
 			<small>There is {chat.groupData.connected} people connected</small>
 
 			<a href={`/chat/${chat.id}`}><button class="join__button">Entrar</button></a>
-			<!-- <p>{chat.id}</p> -->
 		</div>
 	{/each}
 </div>
