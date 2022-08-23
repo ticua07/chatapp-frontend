@@ -2,9 +2,31 @@
 	import { browser } from "$app/env";
 	import ChatList from "$lib/ChatList.svelte";
 
+	type Chats = {
+		id: string;
+		groupData: {
+			title: string;
+			description: string;
+			connected: number;
+		};
+	};
+
 	let loggedIn = false;
 	let username = "";
+	let chats: Chats[];
+	let chatWS: WebSocket;
 	if (browser) {
+		chatWS = new WebSocket(`ws://localhost:8765/chat`);
+		chatWS.onmessage = (message) => {
+			let result = JSON.parse(message.data);
+			if (result.type === "chatlist") {
+				console.log(result);
+				chats = result.data;
+			}
+		};
+		chatWS.onopen = () => {
+			chatWS.send(JSON.stringify({ type: "getChats" }));
+		};
 		let localData = localStorage.getItem("username");
 		if (localData) {
 			username = localData;
@@ -16,20 +38,6 @@
 			loggedIn = true;
 		}
 	};
-
-	//todo: get chats
-	let chats = [
-		{
-			id: "1",
-			title: "Chat 1 only",
-			description: "Chat 1 ⛔"
-		},
-		{
-			id: "2",
-			title: "goodbye",
-			description: "my world"
-		}
-	];
 </script>
 
 <div class="container">
@@ -44,7 +52,8 @@
 		{:else}
 			<h1 class="title">Chats | {username}</h1>
 			<hr />
-			<ChatList {chats} />{/if}
+			<ChatList {chats} socket={chatWS} />
+		{/if}
 	</div>
 </div>
 

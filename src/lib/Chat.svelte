@@ -48,6 +48,8 @@
 					username = `${username}-${randomIdentifier}`;
 
 					console.log(`my randomID is ${randomIdentifier}`);
+				} else if (newMessage.type == "error404") {
+					goto("/");
 				} else {
 					messages = [...messages, newMessage];
 				}

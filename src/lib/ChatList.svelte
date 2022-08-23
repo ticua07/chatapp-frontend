@@ -1,17 +1,62 @@
 <script lang="ts">
 	type Chat = {
 		id: string;
-		title: string;
-		description: string;
+		groupData: {
+			title: string;
+			description: string;
+			connected: number;
+		};
 	};
 	export let chats: Chat[];
+	export let socket: WebSocket;
+	let name: string;
+	let description: string;
+	let error = false;
+
+	const handleCreateChat = () => {
+		if (name && description) {
+			error = false;
+
+			if (socket && socket.OPEN) {
+				socket.onmessage = (message) => {
+					let result = JSON.parse(message.data);
+					if (result.type === "chatlist") {
+						console.log(result);
+						chats = result.data;
+					} else if (result.type === "created") {
+						console.log("This is handleCreateChat");
+						console.log(message);
+					}
+				};
+				socket.send(JSON.stringify({ type: "create", title: name, description: description }));
+				socket.send(JSON.stringify({ type: "getChats" }));
+			}
+		} else {
+			error = true;
+		}
+	};
 </script>
 
 <div class="container">
+	<div
+		class="create-form"
+		onsubmit={(e) => {
+			e.preventDefault();
+		}}
+	>
+		<input type="text" bind:value={name} />
+		<input type="text" bind:value={description} />
+		<button class="join__button" on:click={handleCreateChat}>Create chat</button>
+		{#if error}
+			<p class="error">Error creating chat, Check if name or description is missing.</p>
+		{/if}
+	</div>
+
 	{#each chats as chat}
 		<div class="card">
-			<h1>{chat.title}</h1>
-			<p>{chat.description}</p>
+			<h1>{chat.groupData.title}</h1>
+			<p>{chat.groupData.description}</p>
+			<small>There is {chat.groupData.connected} people connected</small>
 
 			<a href={`/chat/${chat.id}`}><button class="join__button">Entrar</button></a>
 			<!-- <p>{chat.id}</p> -->
@@ -27,6 +72,27 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+	}
+
+	.create-form {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		padding: 10px;
+	}
+
+	.create-form > input {
+		height: 30px;
+		border-radius: 15px;
+		padding-left: 15px;
+		border: 0;
+		outline: 0;
+	}
+
+	.error {
+		color: white;
+		font-weight: bold;
+		text-align: center;
 	}
 
 	.container::-webkit-scrollbar {
